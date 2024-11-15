@@ -1,3 +1,4 @@
+//Reverse
 node* revers(node* cur, node* prev)
 {
     if (cur)
@@ -10,6 +11,7 @@ node* revers(node* cur, node* prev)
         revers(cr_next, cur);
     }
 }
+//Is_palindrome?
 bool IsPalindrome()
 {
     if (!head)
