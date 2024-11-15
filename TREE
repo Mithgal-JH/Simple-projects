@@ -1,0 +1,143 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+template <class T>
+struct node {
+    node* rp=NULL; 
+    node* lp=NULL;  
+    T data;
+
+    
+    node(T item) : data(item), rp(NULL), lp(NULL) {}
+};
+
+template <class T>
+class BinaryTree {
+private:
+    node<T>* root;
+
+public:
+    BinaryTree() : root(NULL) {}
+
+    node<T>* getroot() { return root; }
+
+    void insertion(T item) {
+        node<T>* newnode = new node<T>(item); 
+
+        if (root == NULL) {
+            root = newnode;
+            return;
+        }
+
+        node<T>* cur = root;
+        node<T>* trailer = nullptr;
+        while (cur) {
+            if (cur->data == item) return; 
+
+            trailer = cur;
+            if (cur->data > item)
+                cur = cur->lp;
+            else
+                cur = cur->rp;
+        }
+
+        if (trailer->data > item)
+            trailer->lp = newnode;
+        else
+            trailer->rp = newnode;
+    }
+
+    void preorder(node<T>* p) {
+        if (!p) return;
+        cout << p->data << " ";
+        preorder(p->lp);
+        preorder(p->rp);
+    }
+
+    void inorder(node<T>* p) {
+        if (!p) return;
+        inorder(p->lp);
+        cout << p->data << " ";
+        inorder(p->rp);
+    }
+
+    void postorder(node<T>* p) {
+        if (!p) return;
+        postorder(p->lp);
+        postorder(p->rp);
+        cout << p->data << " ";
+    }
+
+    node<T>* search(T item) {
+        node<T>* cur = root;
+        while (cur) {
+            if (cur->data == item) return cur;
+            else if (cur->data > item)
+                cur = cur->lp;
+            else
+                cur = cur->rp;
+        }
+        return NULL;
+    }
+
+    node<T>* minimum() {
+        node<T>* cur = root;
+        while (cur && cur->lp)
+            cur = cur->lp;
+        return cur;
+    }
+
+    node<T>* maximum() {
+        node<T>* cur = root;
+        while (cur && cur->rp)
+            cur = cur->rp;
+        return cur;
+    }
+
+    int height(node<T>* p) {
+        if (!p) return 0;
+        int left = height(p->lp);
+        int right = height(p->rp);
+        return max(left, right) + 1;
+    }
+
+    int TotalNodes(node<T>* p) {
+        if (!p) return 0;
+        return 1 + TotalNodes(p->lp) + TotalNodes(p->rp);
+    }
+
+    int leavesCount(node<T>* p) {
+        if (!p) return 0;
+        if (!p->lp && !p->rp) return 1;
+        return leavesCount(p->lp) + leavesCount(p->rp);
+    }
+
+    int internal(node<T>* p) {
+        if (!p) return 0;
+        return (p->lp || p->rp) + internal(p->lp) + internal(p->rp);
+    }
+};
+
+int main() {
+    BinaryTree<int> t;
+
+    t.insertion(9);
+    t.insertion(10);
+    t.insertion(6);
+    t.insertion(12);
+    t.insertion(15);
+
+    cout << "Inorder traversal: ";
+    t.inorder(t.getroot());
+    cout << endl;
+
+    if (t.minimum()) cout << "Minimum = " << t.minimum()->data << endl;
+    if (t.maximum()) cout << "Maximum = " << t.maximum()->data << endl;
+
+    cout << "Height: " << t.height(t.getroot()) << endl;
+    cout << "Total nodes: " << t.TotalNodes(t.getroot()) << endl;
+    cout << "Leaf nodes: " << t.leavesCount(t.getroot()) << endl;
+    cout << "Internal nodes: " << t.internal(t.getroot()) << endl;
+
+    return 0;
+}
